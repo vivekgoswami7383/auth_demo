@@ -14,7 +14,7 @@ async function mailSend(otp) {
         host: "smtp.gmail.com",
         auth: {
             user: "developervivek4@gmail.com",
-            pass: "fzksjtwlualmibsb",
+            pass: "giahzcpcwrfglvkj",
         },
     });
 
