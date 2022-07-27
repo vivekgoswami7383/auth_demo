@@ -133,7 +133,7 @@ app.post("/auth/login", async (req, res) => {
 
                 const otpBlockTime = user.otp_block_time
                 const BlockTimeDuration = Math.floor(((nowDate - new Date(otpBlockTime))/1000)/60);
-
+                console.log("========================================================BlockTimeDuration",BlockTimeDuration);
                 if(user.otp_block_time && BlockTimeDuration < 60){
                     return res.status(400).json({
                         error: "You can login after 1 hour",
