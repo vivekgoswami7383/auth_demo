@@ -72,7 +72,7 @@ app.post("/auth/generate_otp", async (req, res) => {
                             });
                         }
                         return res.status(200).json({
-                            data: "Otp sent successfully to your mail",
+                            data: otp,
                             success: true
                         });
                     })
