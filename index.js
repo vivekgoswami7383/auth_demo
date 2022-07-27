@@ -63,7 +63,7 @@ app.post("/auth/generate_otp", async (req, res) => {
                             success: false
                         });
                     }
-                    const updateUser = `UPDATE users SET OTP = "${otp}", otp_generation_gap = "${moment(nowDate).format("YYYY-MM-DD HH:mm:ss")}", otp_expire_time = "${moment(nowDate).format("YYYY-MM-DD HH:mm:ss")}"`
+                    const updateUser = `UPDATE users SET OTP = "${otp}", otp_generation_gap = "${moment(nowDate).format("YYYY-MM-DD HH:mm:ss")}", otp_expire_time = "${moment(nowDate).format("YYYY-MM-DD HH:mm:ss")}" WHERE email = "${email}"`
                     connection.query(updateUser,async(error) => {
                         if(error){
                             return res.status(400).json({
