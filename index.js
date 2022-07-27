@@ -18,7 +18,7 @@ async function mailSend(otp) {
         },
     });
 
-    let info = await transporter.sendMail({
+    await transporter.sendMail({
         from: "developervivek4@gmail.com",
         to: "vivekgoswami7383@gmail.com",
         subject: "Login otp",
