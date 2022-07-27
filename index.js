@@ -5,8 +5,26 @@ const app = express();
 const port = process.env.PORT;
 const moment = require("moment");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 
 app.use(express.json());
+
+async function mailSend(otp) {
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        auth: {
+            user: "developervivek4@gmail.com",
+            pass: "fzksjtwlualmibsb",
+        },
+    });
+
+    let info = await transporter.sendMail({
+        from: "developervivek4@gmail.com",
+        to: "vivekgoswami7383@gmail.com",
+        subject: "Login otp",
+        text: `Use this otp to login - ${otp}`,
+    });
+}
 
 app.post("/auth/generate_otp", async (req, res) => {
     try {
@@ -71,8 +89,9 @@ app.post("/auth/generate_otp", async (req, res) => {
                                 success: false
                             });
                         }
+                        await mailSend(otp)
                         return res.status(200).json({
-                            data: otp,
+                            data: "OTP sent to your mail",
                             success: true
                         });
                     })
@@ -111,14 +130,6 @@ app.post("/auth/login", async (req, res) => {
             }else{
                 let user = userData[0];
                 const nowDate = new Date();
-                const otpExpireTime = user.otp_expire_time
-                const duration = Math.floor(((nowDate - new Date(otpExpireTime))/1000)/60);
-                if(duration > 5){
-                    return res.status(400).json({
-                        error: "OTP expired, generate otp again",
-                        success: false
-                    });
-                }
 
                 const otpBlockTime = user.otp_block_time
                 const BlockTimeDuration = Math.floor(((nowDate - new Date(otpBlockTime))/1000)/60);
@@ -126,6 +137,15 @@ app.post("/auth/login", async (req, res) => {
                 if(user.otp_block_time && BlockTimeDuration < 60){
                     return res.status(400).json({
                         error: "You can login after 1 hour",
+                        success: false
+                    });
+                }
+
+                const otpExpireTime = user.otp_expire_time
+                const duration = Math.floor(((nowDate - new Date(otpExpireTime))/1000)/60);
+                if(duration > 5){
+                    return res.status(400).json({
+                        error: "OTP expired, generate otp again",
                         success: false
                     });
                 }
